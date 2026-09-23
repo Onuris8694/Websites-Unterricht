@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Physik 9. Klasse - Einstieg Kinematik</title>
+    <style>
+        :root {
+            --primary: #2b5c8f;
+            --secondary: #e67e22;
+            --bg: #f4f7f6;
+            --card: #ffffff;
+            --text: #333333;
+            --success: #27ae60;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            background: var(--primary);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .step-card {
+            background: var(--card);
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border-left: 6px solid var(--primary);
+        }
+
+        h2 {
+            color: var(--primary);
+            margin-top: 0;
+        }
+
+        .badge {
+            background: var(--secondary);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            font-weight: bold;
+        }
+
+        /* Interactive Simulation Area */
+        .sim-area {
+            background: #eef2f5;
+            border: 2px dashed #b0bec5;
+            height: 120px;
+            position: relative;
+            border-radius: 8px;
+            margin: 15px 0;
+            overflow: hidden;
+        }
+
+        .ball {
+            width: 30px;
+            height: 30px;
+            background: var(--secondary);
+            border-radius: 50%;
+            position: absolute;
+            top: 45px;
+            left: 10px;
+            transition: left 0.1s linear;
+        }
+
+        .track-marker {
+            position: absolute;
+            bottom: 5px;
+            font-size: 0.8em;
+            color: #666;
+            border-left: 2px solid #ccc;
+            height: 15px;
+            padding-left: 3px;
+        }
+
+        button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1em;
+            margin-right: 8px;
+            margin-top: 8px;
+            transition: background 0.2s;
+        }
+
+        button:hover {
+            background: #1d3e61;
+        }
+
+        .btn-help {
+            background: #8e44ad;
+        }
+        .btn-help:hover {
+            background: #6c3483;
+        }
+
+        /* Differentiation Cards */
+        .help-box {
+            display: none;
+            background: #fcf8e3;
+            border: 1px solid #faebcc;
+            color: #8a6d3b;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+
+        .help-box.active {
+            display: block;
+        }
+
+        /* Quiz / Matching */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        @media (max-width: 600px) {
+            .grid-2 { grid-template-columns: 1fr; }
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        input[type="number"] {
+            width: 70px;
+            padding: 5px;
+            text-align: center;
+        }
+
+        .highlight {
+            background-color: #e8f8f5;
+            padding: 10px;
+            border-radius: 6px;
+            border-left: 4px solid var(--success);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <header>
+        <h1>Physik: Wie bewegen sich Dinge?</h1>
+        <p>Einstieg in die Kinematik & Gleichförmige Bewegung (Klasse 9)</p>
+    </header>
+
+    <!-- SCHRITT 1: Einstieg & Phänomen -->
+    <div class="step-card">
+        <h2><span class="badge">Schritt 1</span> Bewegungsarten & Bewegungsformen</h2>
+        <p>Betrachte die Alltagsbeispiele. Worin unterscheiden sie sich?</p>
+
+        <div class="grid-2">
+            <div>
+                <h4>1. Nach der Form (Bahn):</h4>
+                <ul>
+                    <li><b>Geradlinig:</b> Ein Zug auf gerader Strecke.</li>
+                    <li><b>Krummlinig / Kreisförmig:</b> Ein Gondel auf dem Riesenrad.</li>
+                </ul>
+            </div>
+            <div>
+                <h4>2. Nach der Art (Geschwindigkeit):</h4>
+                <ul>
+                    <li><b>Gleichförmig:</b> Gleichbleibend schnell (kein Gas, kein Bremsen).</li>
+                    <li><b>Ungleichförmig:</b> Ein Anfahren oder Bremsen an der Ampel.</li>
+                </ul>
+            </div>
+        </div>
+
+        <button class="btn-help" onclick="toggleHelp('help1')">💡 Hilfekarte 1: Merkhilfe anzeigen</button>
+        <div id="help1" class="help-box">
+            <b>Merke in einfacher Sprache:</b><br>
+            • <i>Form</i> = Welches Muster zeichnet die Spur auf den Boden? (Gerade oder Kurve)<br>
+            • <i>Art</i> = Verändert sich der Tacho oder bleibt die Zahl gleich?
+        </div>
+    </div>
+
+    <!-- SCHRITT 2: Live-Demonstration / Tafexperiment -->
+    <div class="step-card">
+        <h2><span class="badge">Schritt 2</span> Tafel-Experiment: Die Seifenblase / Die Kugel</h2>
+        <p><b>Ablauf an der Tafel:</b> Wir beobachten eine Bewegung und messen die Zeit für feste Streckenabschnitte (z. B. alle 30 cm).</p>
+        
+        <!-- Interactive Simulation / Timer Helper for Teacher -->
+        <div class="sim-area" id="simTrack">
+            <div class="ball" id="simBall"></div>
+            <div class="track-marker" style="left: 5%;">Start (0 m)</div>
+            <div class="track-marker" style="left: 30%;">0,3 m</div>
+            <div class="track-marker" style="left: 55%;">0,6 m</div>
+            <div class="track-marker" style="left: 80%;">0,9 m</div>
+        </div>
+
+        <div>
+            <button onclick="startSim(1)">▶ Kugel rollen lassen (Gleichförmig)</button>
+            <button onclick="startSim(2)">▶ Kugel beschleunigen (Beschleunigt)</button>
+            <button onclick="resetSim()">↺ Zurücksetzen</button>
+        </div>
+
+        <button class="btn-help" onclick="toggleHelp('help2')">💡 Hilfekarte 2: Wie messe ich richtig?</button>
+        <div id="help2" class="help-box">
+            <b>Tipp zum Messen:</b><br>
+            1. Ruf laut "JETZT", wenn die Kugel die Startlinie überquert.<br>
+            2. Stoppt die Zeit exakt beim Vorbeikommen an den Markierungen.<br>
+            3. Achtet darauf, immer auf Augenhöhe zu schauen!
+        </div>
+    </div>
+
+    <!-- SCHRITT 3: Datenerfassung & Auswertung -->
+    <div class="step-card">
+        <h2><span class="badge">Schritt 3</span> Messwerte eintragen & Prüfen</h2>
+        <p>Tragt gemeinsam die gemessenen Zeiten der gleichförmigen Bewegung ein und rechnet nach:</p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Strecke (s)</th>
+                    <th>Gemessene Zeit (t)</th>
+                    <th>Rechnung: $s \div t$</th>
+                    <th>Ergebnis / Geschwindigkeit</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>0,3 m</td>
+                    <td><input type="number" id="t1" value="1.5" step="0.1"> s</td>
+                    <td>0,3 / <span class="val-t1">1.5</span></td>
+                    <td id="res1">0.2 m/s</td>
+                </tr>
+                <tr>
+                    <td>0,6 m</td>
+                    <td><input type="number" id="t2" value="3.0" step="0.1"> s</td>
+                    <td>0,6 / <span class="val-t2">3.0</span></td>
+                    <td id="res2">0.2 m/s</td>
+                </tr>
+                <tr>
+                    <td>0,9 m</td>
+                    <td><input type="number" id="t3" value="4.5" step="0.1"> s</td>
+                    <td>0,9 / <span class="val-t3">4.5</span></td>
+                    <td id="res3">0.2 m/s</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <button onclick="calculateResults()">Berechnen & Überprüfen</button>
+        <button class="btn-help" onclick="toggleHelp('help3')">💡 Hilfekarte 3: Hilfe beim Rechnen</button>
+
+        <div id="help3" class="help-box">
+            <b>Taschenrechner-Hilfe:</b><br>
+            Tippe zuerst die <b>Strecke</b> ein (z. B. 0,3), dann das Getrenntzeichen <b>÷</b> und danach die <b>Zeit</b> (z. B. 1,5).<br>
+            <i>Erkenntnis:</i> Kommt oben in der letzten Spalte fast immer die gleiche Zahl heraus? Dann ist die Bewegung <b>gleichförmig</b>!
+        </div>
+
+        <div id="evalText" style="margin-top: 15px;"></div>
+    </div>
+
+    <!-- SCHRITT 4: Merksatz & Sicherung -->
+    <div class="step-card">
+        <h2><span class="badge">Schritt 4</span> Sicherung für das Heft</h2>
+        <div class="highlight">
+            <h3>Das halten wir fest:</h3>
+            <p>Bei einer <b>gleichförmigen Bewegung</b> legt ein Körper in <b>gleichen Zeiten</b> immer <b>gleiche Strecken</b> zurück.</p>
+            <p>Die Geschwindigkeit <b>$v$</b> bleibt dabei konstant (gleich):</p>
+            <p style="text-align: center; font-size: 1.2em; font-weight: bold;">
+                Geschwindigkeit = Strecke ÷ Zeit &nbsp;&nbsp;&rarr;&nbsp;&nbsp; $v = \frac{s}{t}$
+            </p>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // Toggle Help Boxes
+    function toggleHelp(id) {
+        const box = document.getElementById(id);
+        box.classList.toggle('active');
+    }
+
+    // Simulation Animation
+    let simInterval;
+    function startSim(type) {
+        resetSim();
+        const ball = document.getElementById('simBall');
+        let pos = 10;
+        let speed = 2;
+
+        simInterval = setInterval(() => {
+            if (type === 1) { // Gleichförmig
+                pos += 3;
+            } else if (type === 2) { // Beschleunigt
+                speed += 0.15;
+                pos += speed;
+            }
+
+            ball.style.left = pos + 'px';
+
+            if (pos > 800) {
+                clearInterval(simInterval);
+            }
+        }, 30);
+    }
+
+    function resetSim() {
+        clearInterval(simInterval);
+        const ball = document.getElementById('simBall');
+        ball.style.left = '10px';
+    }
+
+    // Calculation & Verification
+    function calculateResults() {
+        const t1 = parseFloat(document.getElementById('t1').value) || 1;
+        const t2 = parseFloat(document.getElementById('t2').value) || 1;
+        const t3 = parseFloat(document.getElementById('t3').value) || 1;
+
+        document.querySelectorAll('.val-t1').forEach(e => e.innerText = t1);
+        document.querySelectorAll('.val-t2').forEach(e => e.innerText = t2);
+        document.querySelectorAll('.val-t3').forEach(e => e.innerText = t3);
+
+        const v1 = (0.3 / t1).toFixed(2);
+        const v2 = (0.6 / t2).toFixed(2);
+        const v3 = (0.9 / t3).toFixed(2);
+
+        document.getElementById('res1').innerText = v1 + " m/s";
+        document.getElementById('res2').innerText = v2 + " m/s";
+        document.getElementById('res3').innerText = v3 + " m/s";
+
+        const evalText = document.getElementById('evalText');
+        
+        // Simple check if values are close
+        const diff = Math.max(v1, v2, v3) - Math.min(v1, v2, v3);
+        if (diff < 0.1) {
+            evalText.innerHTML = `<div class="highlight" style="border-left-color: #27ae60;">
+                <b>Super beobachtet!</b> Die Ergebnisse sind nahezu identisch. Die Geschwindigkeit ist konstant $\\rightarrow$ <b>Gleichförmige Bewegung!</b>
+            </div>`;
+        } else {
+            evalText.innerHTML = `<div class="highlight" style="border-left-color: #e74c3c;">
+                <b>Hinweis:</b> Die Werte unterscheiden sich deutlich. Das spricht eher für eine ungleichförmige (beschleunigte oder gebremste) Bewegung oder Messfehler.
+            </div>`;
+        }
+    }
+</script>
+
+</body>
+</html>
